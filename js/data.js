@@ -22,7 +22,7 @@ function createAllDimensions() {
         dimensions.push(
             createDimension(
                 ordinal(i + 1) + " Generator",
-                Decimal.pow(11,i+1)
+                Decimal.pow(16.767,i+1) // haha 67
             )
         );
     }
