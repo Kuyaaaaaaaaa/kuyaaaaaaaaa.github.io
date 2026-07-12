@@ -9,6 +9,8 @@ function load() {
     const loaded = JSON.parse(saveData);
     player.energy = new Decimal(loaded.energy);
     player.notation = loaded.notation;
+    player.compressedEnergy = new Decimal(loaded.compressedEnergy);
+    player.compressedEnergyCost = new Decimal(loaded.compressedEnergyCost);
     for (let i = 0; i < player.dimensions.length; i++) {
     player.dimensions[i].amount =
         new Decimal(loaded.dimensions[i].amount);
@@ -19,6 +21,12 @@ function load() {
     player.dimensions[i].bought =
         loaded.dimensions[i].bought;
     }
+
+    // Reload all the other half-static actions
+
+    document.getElementById("compressBoost").textContent = format(new Decimal(20).max(new Decimal(100).sub(player.compressedEnergy.pow(0.5))));
+    document.getElementById("compressEnergyButton").textContent = "Compress your energy and generators for a log boost: " + format(player.compressedEnergyCost) + " Energy";
+
     playSoundLib(clickSound)
 }
 
