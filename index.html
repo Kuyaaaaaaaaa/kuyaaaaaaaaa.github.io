@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="tabBar">
-    <button class="tabButton" data-tab="dimensions">Generators</button>
-    <button class="tabButton" data-tab="settings">Settings</button>
+    <div class = "tabBarContainer" id="tabBar">
+    <button class="tabButton" data-tab="dimensions" onclick="playSoundLib(clickSound)">Generators</button>
+    <button class="tabButton" data-tab="settings" onclick="playSoundLib(clickSound)">Settings</button>
+    <button class="tabButton" data-tab="achievements" onclick="playSoundLib(clickSound)">Achievements</button>
     </div>
 
     <div id="news-ticker">
@@ -29,22 +30,58 @@
     </div>
 
 <div class="tabPage" id="dimensions">
-    <div id="dimensionContainer"></div>
+    
+    <div class="subTabBar">
+           <button class="subTabButton" data-group="dimensionTabs" data-page="dimensions" onclick="playSoundLib(clickSound)">Generators</button>
+           <button class="subTabButton" data-group="dimensionTabs" data-page="prestige" onclick="playSoundLib(clickSound)">Prestige</button>
+    </div>
+    
+    <div class="subTabPage" id="dimensionsSubPage" data-group="dimensionTabs" data-page="dimensions">
+
+        <button onclick="maxAllDimensions(); playSoundLib(clickSound);">Buy Max</button>
+
+        <div id="dimensionContainer"></div>
+
+    </div>
+
+    <div class="subTabPage" id="prestigeSubPage" data-group="dimensionTabs" data-page="prestige" style="display: none;">
+
+        <div id="prestigeContainer">
+
+            <div class="backgroundFancy">
+                <button id="compressEnergyButton">
+                    Compress all your energy for a boost in Logarithms
+                </button>
+
+                <h2 id="compressBoost">100 → ?</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <div class="tabPage" id="settings">
     
-    <div class="saveLoadButtons">
-        
-        <h2>Settings</h2>
+    <div class="settingsContainer">
 
-        <button onclick="save(); playSoundLib(clickSound);" id="saveButton">Save</button>
-        <button onclick="load()" id="loadButton">Load</button>
-        <button onclick="playSoundLib(clickSound)" id="wipeButton">Wipe Save</button>
+        <h2 class="h2">Settings</h2>
+
+        <div class="saveLoadButtons">
+            
+            
+
+            <button onclick="save(); playSoundLib(clickSound);" id="saveButton">Save</button>
+            <button onclick="load()" id="loadButton">Load</button>
+            <button onclick="playSoundLib(clickSound)" id="wipeButton">Wipe Save</button>
+
+        </div>
 
     </div>
 
-    <div id="wipeConfirm" class="wipeConfirmation" style="display: none;">
+    <div id="wipeConfirm" class="wipeConfirmationContainer" style="display: none;">
         
         <p>Are you sure? This cannot be undone.</p>
 
@@ -54,9 +91,24 @@
 
 </div>
 
+<div class="tabPage" id="achievements">
+    <div>Something here... yet >:)</div>
+    <div id="achievementContainer"></div>
+</div>
+
+<div id="infinityProgressContainer" class="infinityProgressContainer" aria-label="Infinity progress">
+    <div class="infinityProgressLabel">
+        <span>Matter Progress</span>
+        <span id="infinityProgressText">0.00% to "Infinity"</span>
+    </div>
+    <div class="infinityProgressBar">
+        <div id="infinityProgressFill" class="infinityProgressFill"></div>
+    </div>
+</div>
 
     <script src="js/break_eternity.js"></script>
     <script src="js/data.js"></script>
+    <script src="js/achievements.js"></script>
     <script src="js/player.js"></script>
     <script src="js/save.js"></script>
     <script src="js/production.js"></script>
