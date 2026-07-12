@@ -1,3 +1,7 @@
+const dimensionContainer = document.getElementById("dimensionContainer");
+const achievementContainer = document.getElementById("achievementContainer");
+const prestigeContainer = document.getElementById("prestigeContainer");
+
 function createDimensionRow(index) {
     const row = document.createElement("div");
     row.className = "dimensionRow";
@@ -34,7 +38,7 @@ function createDimensionRow(index) {
 
     button.addEventListener("mouseenter", function () {
     button.title =
-        `Multiplier: ×${format(Decimal.fromNumber(player.dimensions[index].bought))}\nBought:${format(getDimensionMultiplier(index))}`;
+        `Bought: ${format(Decimal.fromNumber(player.dimensions[index].bought))}\nMultiplier: ×${format(getDimensionMultiplier(index))}`;
     });
 
     row.appendChild(name);
@@ -52,20 +56,64 @@ for (let i = 0; i < player.dimensions.length; i++) {
     // woah GENESIS WOAH WOAH WOAH GENESISSSSSSIIJ DJFOjsojfpjafsojsifdojifdojifsodp
 }
 
+// Initialize the news ticker with a random message
 const ticker = document.getElementById("news-text");
 
+function showRandomTickerMessage() {
+    const message = newsmessages[Math.floor(Math.random() * newsmessages.length)];
+    ticker.textContent = message;
+
+    // Reset the animation
+    /*ticker.style.animation = "none";
+    void ticker.offsetWidth;
+    ticker.style.animation = "ticker 30s linear infinite";*/
+}
+
 ticker.addEventListener("animationiteration", () => {
-  /*const charsPerSecond = 3;
+    showRandomTickerMessage();
+});
 
-  let seconds =
-    ticker.textContent.length / charsPerSecond;
+function createAchievementRow(achievement) {
+    const row = document.createElement("div");
+    row.className = "achievementRow";
 
-  ticker.style.animationDuration = `${seconds}s`;
-  */
+    const name = document.createElement("div");
+    name.className = "achievementName";
+    name.textContent = achievement.name;
 
-  ticker.textContent =
-  newsmessages[Math.floor(Math.random() * newsmessages.length)];
+    const description = document.createElement("div");
+    description.className = "achievementDescription";
+    description.textContent = achievement.description;
 
+    const unlocked = document.createElement("div");
+    unlocked.className = "achievementUnlocked";
+    unlocked.id = "unlockedSign" + achievement.id
+    unlocked.textContent = "✘"
+
+    row.appendChild(name);
+    row.appendChild(description);
+    row.appendChild(unlocked);
+
+    achievementContainer.appendChild(row);
+}
+
+for (let i = 0; i < achievements[0].length; i++) {
+    createAchievementRow(achievements[0][i]);
+}
+
+document.getElementById("compressEnergyButton").addEventListener("click", function () {
+    if (player.energy.gte(player.compressedEnergyCost)) {
+        player.compressedEnergy = player.compressedEnergy.add(1);
+        player.energy = new Decimal(0);
+        player.compressedEnergyCost = player.compressedEnergyCost.mul(2.2142e3);
+        document.getElementById("compressEnergyButton").textContent = "Compress your energy and generators for a log boost: " + format(player.compressedEnergyCost) + " Energy";
+
+        for (let i = 0; i < player.dimensions.length - 1; i++) {
+            player.dimensions[i].amount = new Decimal(10);
+        };
+
+        document.getElementById("compressBoost").textContent = format(new Decimal(20).max(new Decimal(100).sub(player.compressedEnergy.pow(0.5))));
+    };
 });
 
 load();
