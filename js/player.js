@@ -4,14 +4,18 @@
 
 
 const player = {
-    energy: new Decimal(4e20),
+    energy: new Decimal(281.09),
     // hehehe
     dimensions: createAllDimensions(),
     compressedEnergy: new Decimal(0),
-    compressedEnergyCost: new Decimal(1e18),
-    entropy: new Decimal(0),
+    compressedEnergyCost: new Decimal(1e10),
+    entropy: new Decimal(1),
+
     notation: "Mixed Scientific",
-    version: 2
+    timePlayed: 0,
+    version: 2,
+
+    alpha: new Decimal(1)
 };
 
 const achievements = [

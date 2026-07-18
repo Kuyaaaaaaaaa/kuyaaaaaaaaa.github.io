@@ -1,42 +1,44 @@
-(function () {
-    function openTab(tabName) {
-        const pages = document.querySelectorAll(".tabPage");
-        pages.forEach((page) => {
-            page.style.display = "none";
-        });
+function openAPoopyTab(tabName) {
+    const pages = document.querySelectorAll(".tabPage");
 
-        const targetPage = document.getElementById(tabName);
-        if (targetPage) {
-            targetPage.style.display = "block";
-        }
+    for (const page of pages) {
+        page.style.display = "none";
     }
 
-    function openSubTab(group, page) {
-        const subPages = document.querySelectorAll(`.subTabPage[data-group="${group}"]`);
-        subPages.forEach((subPage) => {
-            subPage.style.display = "none";
-        });
+    const targetPage = document.getElementById(tabName);
+    if (targetPage) {
+        targetPage.style.display = "block";
+    }
+}
 
-        const targetPage = document.querySelector(`.subTabPage[data-group="${group}"][data-page="${page}"]`);
-        if (targetPage) {
-            targetPage.style.display = "block";
-        }
+const tabButtons = document.querySelectorAll(".tabButton");
+
+for (const button of tabButtons) {
+    button.addEventListener("click", function () {
+        openAPoopyTab(button.dataset.tab);
+    });
+}
+
+function openAPoopySubTab(group, page) {
+    const subPages = document.querySelectorAll(".subTabPage[data-group='" + group + "']");
+
+    for (const pageElement of subPages) {
+        pageElement.style.display = "none";
     }
 
-    const tabButtons = document.querySelectorAll(".tabButton");
-    tabButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            openTab(button.dataset.tab);
-        });
-    });
+    const targetPage = document.getElementById(page + "SubPage");
+    if (targetPage) {
+        targetPage.style.display = "block";
+    }
+}
 
-    const subTabButtons = document.querySelectorAll(".subTabButton");
-    subTabButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            openSubTab(button.dataset.group, button.dataset.page);
-        });
-    });
+const subTabButtons = document.querySelectorAll(".subTabButton");
 
-    openTab("dimensions");
-    openSubTab("dimensionTabs", "dimensions");
-})();
+for (const button of subTabButtons) {
+    button.addEventListener("click", function () {
+        openAPoopySubTab(button.dataset.group, button.dataset.page);
+    });
+}
+
+openAPoopyTab("dimensions");
+openAPoopySubTab("dimensionTabs", "dimensions");

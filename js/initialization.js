@@ -2,6 +2,39 @@ const dimensionContainer = document.getElementById("dimensionContainer");
 const achievementContainer = document.getElementById("achievementContainer");
 const prestigeContainer = document.getElementById("prestigeContainer");
 
+const notationSelect = document.getElementById("notationSelect");
+
+function refNotUpdatedUI() {
+    document.getElementById("compressEnergyButton").textContent = "Compress your energy and generators for a log boost: " + format(player.compressedEnergyCost) + " Energy";
+    document.getElementById("compressBoost").textContent = "log"+format(new Decimal(20).max(new Decimal(100).sub(player.compressedEnergy.pow(0.5))))+"()";
+    document.getElementById("entropyBoost").textContent = format(player.entropy.log(10).max(1));
+}
+
+const NOTATIONS = {
+    "Mixed Scientific": new MixedScientificNotation(),
+    "Shi": new ShiNotation(),
+    "Standard": new StandardNotation(),
+    "Pickle Dough": new PickleDoughNotation(),
+    "Assorted Moans": new AssortedMoansNotation()
+};
+
+if (notationSelect) {
+    notationSelect.value = player.notation || "Mixed Scientific";
+    notationSelect.addEventListener("change", function () {
+        player.notation = notationSelect.value;
+        save();
+        updateUI();
+        refNotUpdatedUI();
+        updateNewsTicker();
+    });
+}
+
+
+function format(decimalValue) {
+    return NOTATIONS[player.notation].formatC(decimalValue);
+}
+
+
 function createDimensionRow(index) {
     const row = document.createElement("div");
     row.className = "dimensionRow";
@@ -30,9 +63,9 @@ function createDimensionRow(index) {
     button.id = "button" + index;
 
     button.addEventListener("click", function () {
-    buyDimension(index);
-    clickSound.currentTime = 0;
-    clickSound.play();
+        buyDimension(index);
+        clickSound.currentTime = 0;
+        clickSound.play();
 
     });
 
@@ -60,8 +93,13 @@ for (let i = 0; i < player.dimensions.length; i++) {
 const ticker = document.getElementById("news-text");
 
 function showRandomTickerMessage() {
-    const message = newsmessages[Math.floor(Math.random() * newsmessages.length)];
-    ticker.textContent = message;
+    const messages = Array.isArray(newsmessages) && newsmessages.length > 0
+        ? newsmessages
+        : ["Welcome to Genesis Augmentations!"];
+    const message = messages[Math.floor(Math.random() * messages.length)];
+    if (ticker) {
+        ticker.textContent = message;
+    }
 
     // Reset the animation
     /*ticker.style.animation = "none";
@@ -105,14 +143,29 @@ document.getElementById("compressEnergyButton").addEventListener("click", functi
     if (player.energy.gte(player.compressedEnergyCost)) {
         player.compressedEnergy = player.compressedEnergy.add(1);
         player.energy = new Decimal(0);
-        player.compressedEnergyCost = player.compressedEnergyCost.mul(2.2142e3);
+        player.compressedEnergyCost = player.compressedEnergyCost.mul(2.2142e2);
         document.getElementById("compressEnergyButton").textContent = "Compress your energy and generators for a log boost: " + format(player.compressedEnergyCost) + " Energy";
 
         for (let i = 0; i < player.dimensions.length - 1; i++) {
             player.dimensions[i].amount = new Decimal(10);
         };
 
-        document.getElementById("compressBoost").textContent = format(new Decimal(20).max(new Decimal(100).sub(player.compressedEnergy.pow(0.5))));
+        document.getElementById("compressBoost").textContent = "log"+format(E(20).max(E(100).sub(player.compressedEnergy.pow(0.5))))+"()";
+    };
+});
+
+document.getElementById("entropyConverterButton").addEventListener("click", function () {
+    if (player.energy.gte(1e90)) {
+        player.entropy = player.entropy.add(player.energy.div(1e90).pow(0.5));
+        player.compressedEnergy = new Decimal(0);
+        player.compressedEnergyCost = new Decimal(1e10);
+        player.dimensions = createAllDimensions();
+
+        document.getElementById("entropyBoost").textContent = format(player.entropy.log(10).max(1));
+        document.getElementById("compressBoost").textContent = "log"+format(E(20).max(E(100).sub(player.compressedEnergy.pow(0.5))))+"()";
+        document.getElementById("compressEnergyButton").textContent = "Compress your energy and generators for a log boost: " + format(player.compressedEnergyCost) + " Energy";
+        player.energy = new Decimal(280.9);
+        updateUI();
     };
 });
 
@@ -131,3 +184,4 @@ function playSoundLib(sound) {
   sound.currentTime = 0;
   sound.play();
 }
+
