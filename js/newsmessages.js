@@ -28,23 +28,16 @@ let newsmessagesLoading = ["WELCOME TO THE PURGATORY",
     "Don't mind me, I'm just passing here.",
     "Shi Notation is so SHIt that I don't even know why I made it (get it funny punny joke(punny reference????))",
     "The autocorrect in VS Code is so bad that it keeps changing \"Shi Notation\" to \"Shit Notation\". I don't know why, but it does.",
-    "VS Code's autocorrect is so funny it literally made almost half the news messages in this game (and made me die laughing)",
-    "function BhargiDaRizzyGettingAGirlfriend() {return false}; ",
-    "console.log(\"BhargiDaRizzyGettingAGirlfriend() === true\");",
-    "I have four moods: happy, sad, angry, and WHY WONT THIS CODE WORK",
+    "VS Code's autocorrect is so funny it literally made almost half the news messages in this game (and made me die laughing)",    "I have four moods: happy, sad, angry, and WHY WONT THIS CODE WORK",
     "Me, as the developer, literally forgot to add a semicolon at the end of a line, and it caused the game to be overflowing with antimatter.",
     "kalokohan ka.",
-    "new Decimal(BhargiDaRizzyGettingAGirlfriend()) ay totoo? ang computer ay nagsasabi na totoo, ngunit ang function ay nagsasabi na hindi totoo. Ano ang totoo? Ang computer ba o ang function?",
     "This project was made by the Philippine Government to \"help the country\", but they accidentaly went into the bank and started eating the cash. What am I supposed to do, make antimatter or matter? I don't know, but I guess I'll just make antimatter because it's easier to make than matter. Nah I'm joking I like matter better.",
     "I don't even know why I started with Python, like how did I even code there? I can't even space out the individual lines properly.",
     "By the way, this isn't another Antimatter Dimensions clone, I literally didn't add any Infinity or Eternity or Unity or something like that...",
     "function thirteenthDimension() {return false};",
     "New CodeTorch Update: Nothing.",
-    "I've been watching something called \"Gayniggers from Outer Space\" and it's so funny that I can't stop laughing. It's a 1992 Danish short film about a group of aliens who are black and turn men gay.(vs code literally is the best autocorrect ever, it literally made me write this news message)",
     "What's vue?",
-    "In the 1800's back in the Philippines, there was a man named Jose Rizal, and he was a really smart guy. He was so smart that he even made a function called BhargiDaRizzyGettingAGirlfriend() which always returns false. I don't know why he made that function, but I guess he just wanted to make fun of the friend who kicked me out of punny pals.",
     "There's so many news messages that I repeat literally everything. Oh well, I guess I'll have to cope with not having a good discord server.",
-    "\"N***er\"-bhargi",
     "Is this vs code autocorrect made by ai, vs code autocorrect respond here please",
     "Hey VS Code stop autocorrecting my news messages, I don't like it. I don't want \"coming\" autocorrect to \"cumming\", I'm literally sending this to a kid's coding platform!",
     "pee pee poo poo haha funny get it",
@@ -85,5 +78,5 @@ function fetchNews() {
 
 function updateNewsTicker() {
   newsmessagesLoading[6] = `endgame: ${format(1e254)}.`
-  newsmessagesLoading[12] = `new Decimal(${format(E("1e67"))}) so funny get it ${format(E("67"))} is a number and e is a letter, so it's like ${format(6)} and ${format(7)} are together, so it's like ${format(E(67))}, get it funny punny (punny reference????))`
+  newsmessagesLoading[45] = `new Decimal(${format(E("1e67"))}) so funny get it ${format(E("67"))} is a number and e is a letter, so it's like ${format(6)} and ${format(7)} are together, so it's like ${format(E(67))}, get it funny punny (punny reference????))`
 }
