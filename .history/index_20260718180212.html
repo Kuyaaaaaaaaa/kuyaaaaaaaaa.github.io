@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genesis Augmentation</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class = "tabBarContainer" id="tabBar">
+    <button class="tabButton" data-tab="dimensions" onclick="playSoundLib(clickSound)">Generators</button>
+    <button class="tabButton" data-tab="settings" onclick="playSoundLib(clickSound)">Settings</button>
+    <button class="tabButton" data-tab="achievements" onclick="playSoundLib(clickSound)">Achievements</button>
+    <button class="tabButton" data-tab="bonus" onclick="playSoundLib(clickSound)">Bonus</button>
+    </div>
+
+    <div id="news-ticker">
+    <span id="news-text">
+        Welcome to Genesis Augmentations! Endgame is unbalanced, like always....
+    </span>
+    </div>
+
+    <div class="header">
+        <h1>Genesis Augmentation</h1>
+
+        <div class="energy">
+            Energy
+            <span id="energy">0</span>
+        </div>
+        
+    </div>
+
+<div class="tabPage" id="dimensions">
+    
+    <div class="subTabBar">
+           <button class="subTabButton" data-group="dimensionTabs" data-page="dimensions" onclick="playSoundLib(clickSound)">Generators</button>
+           <button class="subTabButton" data-group="dimensionTabs" data-page="prestige" onclick="playSoundLib(clickSound)">Prestige</button>
+    </div>
+    
+    <div class="subTabPage" id="dimensionsSubPage" data-group="dimensionTabs" data-page="dimensions">
+
+        <button onclick="maxAllDimensions(); playSoundLib(clickSound);">Buy Max</button>
+
+        <div id="dimensionContainer"></div>
+
+    </div>
+
+    <div class="subTabPage" id="prestigeSubPage" data-group="dimensionTabs" data-page="prestige" style="display: none;">
+
+        <div id="prestigeContainer">
+
+            <div class="backgroundFancy">
+                <button class="prestigeButtons" id="compressEnergyButton">
+                    Compress all your energy  and generators for a log boost: 10.00B Energy
+                </button>
+
+                <h2 id="compressBoost">100 → ?</h2>
+
+                <button class="prestigeButtons" id="entropyConverterButton">
+                    Convert all your Energy for a boost in Multipliers and Boost Power.
+                </button>
+
+                <h2 id="entropyBoost">1 → 2</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="tabPage" id="settings">
+    
+    <div class="settingsContainer">
+
+        <h2 class="h2">Settings</h2>
+
+        <div id="totalPlaytime">Playtime: 0 seconds</div>
+
+        <div class="settingsRow">
+            <label for="notationSelect">Number format</label>
+            <select id="notationSelect">
+                <option value="Mixed Scientific">Mixed Scientific</option>
+                <option value="Standard">Standard</option>
+                <option value="Shi">Shi</option>
+                <option value="Pickle Dough">Dill Dough</option>
+                <option value="Assorted Moans">Assorted Moans</option>
+            </select>
+        </div>
+
+        <div class="saveLoadButtons">
+            <button onclick="save(); playSoundLib(clickSound);" id="saveButton">Save</button>
+            <button onclick="load()" id="loadButton">Load</button>
+            <button onclick="playSoundLib(clickSound)" id="wipeButton">Wipe Save</button>
+        </div>
+
+    </div>
+
+    <div id="wipeConfirm" class="wipeConfirmationContainer" style="display: none;">
+        
+        <p>Are you sure? This cannot be undone.</p>
+
+        <button onclick="playSoundLib(clickSound)" id="confirmWipe">Yes</button>
+        <button onclick="playSoundLib(clickSound)" id="cancelWipe">Cancel</button>
+    </div>
+
+</div>
+
+<div class="tabPage" id="achievements">
+    <div id="achievementContainer"></div>
+</div>
+
+<div class="tabPage" id="bonus">
+    <div class="alpha">
+        <div class="alphaDisplayContainer"><h2 id="alphaDisplay">You have 0.000 alpha.</h2></div>
+        <img src="assets/images/bubbles.png" alt="Floating botanical bubbles with delicate plants and translucent spheres scattered across a soft, neutral background, creating a serene and ethereal aesthetic with a gentle, calming tone">
+        <div>I'm trying to make a frutiger theme don't complain pls.</div>
+    </div>
+</div>
+
+<div id="infinityProgressContainer" class="infinityProgressContainer" aria-label="Infinity progress">
+    <div class="infinityProgressLabel">
+        <span>Matter Progress</span>
+        <span id="infinityProgressText">0.00% to "Infinity"</span>
+    </div>
+    <div class="infinityProgressBar">
+        <div id="infinityProgressFill" class="infinityProgressFill"></div>
+    </div>
+</div>
+
+    <script src="js/break_eternity.js"></script>
+    <script src="js/importantFunctions.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/save.js"></script>
+    <script src="js/production.js"></script>
+    <script src="js/notations/formatting.js"></script>
+    <script src="js/newsmessages.js"></script>
+    <script src="js/tabs.js"></script>
+    <script src="js/initialization.js"></script>
+
+</body>
+</html>
