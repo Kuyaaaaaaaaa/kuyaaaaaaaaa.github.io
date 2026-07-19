@@ -32,6 +32,9 @@ function load() {
             player.timePlayed = Number(loaded.timePlayed ?? 0);
             player.version = loaded.version ?? player.version;
             player.alpha = new Decimal(loaded.alpha ?? 1);
+            player.entropyUpgradeCost = E(loaded.entropyUpgradeCost ?? 100);
+            player.entropyUpgradeEffect = E(loaded.entropyUpgradeEffect ?? 1);
+
         } catch (error) {
             console.error("Save load failed partway through — falling back to defaults for remaining fields.", error);
         }
