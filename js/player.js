@@ -10,6 +10,8 @@ const player = {
     compressedEnergy: new Decimal(0),
     compressedEnergyCost: new Decimal(1e10),
     entropy: new Decimal(1),
+    entropyUpgradeCost: E(100),
+    entropyUpgradeEffect: E(1),
 
     notation: "Mixed Scientific",
     timePlayed: 0,

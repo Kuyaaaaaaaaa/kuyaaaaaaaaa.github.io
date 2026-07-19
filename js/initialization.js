@@ -169,6 +169,15 @@ document.getElementById("entropyConverterButton").addEventListener("click", func
     };
 });
 
+document.getElementById("entropyUpgradeButton").addEventListener("click", function () {
+    if (player.entropy.gte(player.entropyUpgradeCost)) {
+        player.entropy = player.entropy.sub(player.entropyUpgradeCost);
+        player.entropyUpgradeCost = player.entropyUpgradeCost.mul(100).pow(1.01);
+        player.entropyUpgradeEffect = player.entropyUpgradeEffect.mul(1.1);
+        document.getElementById("entropyUpgradeButton").textContent = `Upgrade your Dimension gain by x1.1 per Level: ${format(player.entropyUpgradeCost)}`;
+    };
+});
+
 load();
 
 newsmessages = fetchNews();

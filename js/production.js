@@ -65,7 +65,10 @@ function updateUI() {
     }
 
     document.getElementById("entropyConverterButton").textContent = player.energy.gte(1e90) ? `Reset Energy, Dimensions, and Compressed Energy for: ${format(player.entropy.add(player.energy.div(1e90).pow(0.5)))} Entropy.` : "You don't have enough Energy. So sad.";
-    
+    document.getElementById("compressedEnergyDisplay").textContent = format(player.compressedEnergy) + " Compressed Energy";
+    document.getElementById("entropyDisplay").textContent = format(player.entropy) + " Entropy";
+
+
     // Settings
 
     document.getElementById("totalPlaytime").textContent = "Playtime: " + format(E(player.timePlayed));
@@ -96,7 +99,8 @@ function getDimensionMultiplier(index) {
     multiplier = multiplier
         .mul(dim.amount.log( E(20).max(E(100).sub(player.compressedEnergy.mul(player.entropy.log(10).max(1)).pow(0.5))) ).pow(new Decimal(Math.floor(dim.bought / 20)))
             .pow(0.3)) // to keep the numbers from flipping exploding during startgame
-        .mul(player.compressedEnergy.mul(player.entropy.log(10).max(1)).pow(3.7).max(1));  // Ensure multiplier stays at least 1
+        .mul(player.compressedEnergy.mul(player.entropy.log(10).max(1)).pow(3.7).max(1))  // Ensure multiplier stays at least 1
+        .mul(player.entropyUpgradeEffect);
     return multiplier;
 }
 
