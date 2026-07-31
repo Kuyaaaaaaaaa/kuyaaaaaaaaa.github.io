@@ -4,18 +4,16 @@ const prestigeContainer = document.getElementById("prestigeContainer");
 
 const notationSelect = document.getElementById("notationSelect");
 
-function refNotUpdatedUI() {
-    document.getElementById("compressEnergyButton").textContent = "Compress your energy and generators for a log boost: " + format(player.compressedEnergyCost) + " Energy";
-    document.getElementById("compressBoost").textContent = "log"+format(new Decimal(20).max(new Decimal(100).sub(player.compressedEnergy.pow(0.5))))+"()";
-    document.getElementById("entropyBoost").textContent = format(player.entropy.log(10).max(1));
-}
+
 
 const NOTATIONS = {
     "Mixed Scientific": new MixedScientificNotation(),
     "Shi": new ShiNotation(),
     "Standard": new StandardNotation(),
     "Pickle Dough": new PickleDoughNotation(),
-    "Assorted Moans": new AssortedMoansNotation()
+    "Assorted Moans": new AssortedMoansNotation(),
+    "Logarithm": new LogarithmNotation(),
+    "Inventor": new InventionNotation()
 };
 
 if (notationSelect) {
@@ -24,7 +22,7 @@ if (notationSelect) {
         player.notation = notationSelect.value;
         save();
         updateUI();
-        refNotUpdatedUI();
+        loadHalfActiveItems();
         updateNewsTicker();
     });
 }
@@ -150,7 +148,7 @@ document.getElementById("compressEnergyButton").addEventListener("click", functi
             player.dimensions[i].amount = new Decimal(10);
         };
 
-        document.getElementById("compressBoost").textContent = "log"+format(E(20).max(E(100).sub(player.compressedEnergy.pow(0.5))))+"()";
+        document.getElementById("compressBoost").innerHTML = "log"+toSubscript(format(E(20).max(E(100).sub(player.compressedEnergy.pow(0.5)))))+"()";
     };
 });
 
@@ -162,7 +160,7 @@ document.getElementById("entropyConverterButton").addEventListener("click", func
         player.dimensions = createAllDimensions();
 
         document.getElementById("entropyBoost").textContent = format(player.entropy.log(10).max(1));
-        document.getElementById("compressBoost").textContent = "log"+format(E(20).max(E(100).sub(player.compressedEnergy.pow(0.5))))+"()";
+        document.getElementById("compressBoost").innerHTML = "log"+toSubscript(format(E(20).max(E(100).sub(player.compressedEnergy.pow(0.5)))))+"()";
         document.getElementById("compressEnergyButton").textContent = "Compress your energy and generators for a log boost: " + format(player.compressedEnergyCost) + " Energy";
         player.energy = new Decimal(280.9);
         updateUI();
@@ -173,8 +171,29 @@ document.getElementById("entropyUpgradeButton").addEventListener("click", functi
     if (player.entropy.gte(player.entropyUpgradeCost)) {
         player.entropy = player.entropy.sub(player.entropyUpgradeCost);
         player.entropyUpgradeCost = player.entropyUpgradeCost.mul(100).pow(1.01);
-        player.entropyUpgradeEffect = player.entropyUpgradeEffect.mul(1.1);
+        player.entropyUpgradeAmount = player.entropyUpgradeAmount.add(1);
+        player.entropyUpgradeEffect = player.entropyUpgradeAmount.pow_base(1.2);
         document.getElementById("entropyUpgradeButton").textContent = `Upgrade your Dimension gain by x1.1 per Level: ${format(player.entropyUpgradeCost)}`;
+
+    };
+});
+
+document.getElementById("matterConverter").addEventListener("click", function () {
+    if (player.energy.gte(E("1.79e308"))) {
+        player.matter = player.matter.add(player.energy.div(E("1.79e308")).pow(0.00324407040516344));
+        document.getElementById("matterDisplay").textContent = format(player.matter) + " Matter";
+    };
+
+});
+
+document.getElementById("theInfiniteLuck").addEventListener("click", function () {
+    if (player.matter.gte(player.luckMultiplierCost)) {
+        player.luckMultiplier = player.luckMultiplier.mul(5);
+        player.matter = player.matter.sub(player.luckMultiplierCost);
+        player.luckMultiplierCost = player.luckMultiplierCost.mul(1.19623119885);
+        document.getElementById("theInfiniteLuck").textContent = `Multiply Luck by 5: ${format(player.luckMultiplierCost)} Matter`
+        document.getElementById("matterDisplay").textContent = format(player.matter) + " Matter";
+    
     };
 });
 
@@ -184,7 +203,7 @@ newsmessages = fetchNews();
 console.log(newsmessages);
 
 setInterval(save, 10000);
-setInterval(gameLoop,50)
+setInterval(gameLoop,50);
 
 openAPoopyTab("dimensions");
 

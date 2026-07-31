@@ -14,9 +14,12 @@
 <body>
     <div class = "tabBarContainer" id="tabBar">
     <button class="tabButton" data-tab="dimensions" onclick="playSoundLib(clickSound)">Generators</button>
+    <button class="tabButton" data-tab="matter" onclick="playSoundLib(clickSound)">Matter</button>
     <button class="tabButton" data-tab="settings" onclick="playSoundLib(clickSound)">Settings</button>
     <button class="tabButton" data-tab="achievements" onclick="playSoundLib(clickSound)">Achievements</button>
     <button class="tabButton" data-tab="bonus" onclick="playSoundLib(clickSound)">Bonus</button>
+    <button class="tabButton" data-tab="changelog" onclick="playSoundLib(clickSound)">Changelog</button>
+    
     </div>
 
     <div id="news-ticker">
@@ -30,7 +33,7 @@
 
         <div class="energy">
             Energy
-            <span id="energy">0</span>
+            <span id="energy" data-increment="fastChanging">0</span>
         </div>
         
     </div>
@@ -44,9 +47,9 @@
     
     <div class="subTabPage" id="dimensionsSubPage" data-group="dimensionTabs" data-page="dimensions">
 
-        <button onclick="maxAllDimensions(); playSoundLib(clickSound);">Buy Max</button>
+        <button class="simpleButton" onclick="maxAllDimensions(); playSoundLib(clickSound);">Buy Max</button>
 
-        <div id="dimensionContainer"></div>
+        <div id="dimensionContainer" data-increment="fastChanging"></div>
 
     </div>
 
@@ -54,7 +57,13 @@
 
         <div id="prestigeContainer">
 
-            <div class="backgroundFancy">
+            <div class="backgroundPrestige">
+                <h3 id="compressedEnergyDisplay">0 Compressed Energy</h3>
+                <h3 id="entropyDisplay">0 Entropy</h3>
+            </div>
+
+
+            <div class="backgroundPrestige">
                 <button class="prestigeButtons" id="compressEnergyButton">
                     Compress all your energy  and generators for a log boost: 10.00B Energy
                 </button>
@@ -67,12 +76,38 @@
 
                 <h2 id="entropyBoost">1 → 2</h2>
 
+                <button class="prestigeButtons" id="entropyUpgradeButton">
+                    Upgrade your Dimension gain by x1.1 per Level: 100 Entropy
+                </button>
+
+
+
             </div>
 
         </div>
 
     </div>
 
+</div>
+
+<div class="tabPage" id="matter">
+    <div class="matterContainer">
+    Reset all Energy for a few pieces of matter, since your energy is so great it broke the conservation of mass.
+        
+        <h2 id="matterDisplay">0.000 Matter</h2>
+        <button class="matterButtons" id="matterConverter">
+            +0.00 on Matter
+        </button>
+
+        <h2 id="luckEffects" class="alignTextMiddle">Effects<br>x1.00 Energy<br>x1.00 Matter<br>x1.0 Alpha</h2>
+        
+        <h3 id="extraLuckDisplay" class="alignTextMiddle">Next: 1 in 100<br>1 second per roll</h3>
+
+        <button id="theInfiniteLuck"> 
+            Multiply Luck by 2: 0.00 Matter
+        </button>
+    </div>
+    
 </div>
 
 <div class="tabPage" id="settings">
@@ -88,9 +123,11 @@
             <select id="notationSelect">
                 <option value="Mixed Scientific">Mixed Scientific</option>
                 <option value="Standard">Standard</option>
+                <option value="Logarithm">Logarithm</option>
                 <option value="Shi">Shi</option>
                 <option value="Pickle Dough">Dill Dough</option>
                 <option value="Assorted Moans">Assorted Moans</option>
+                <option value="Inventor">Please select your gender.</option>
             </select>
         </div>
 
@@ -118,10 +155,27 @@
 
 <div class="tabPage" id="bonus">
     <div class="alpha">
-        <div class="alphaDisplayContainer"><h2 id="alphaDisplay">You have 0.000 alpha.</h2></div>
+        <div class="alphaDisplayContainer"><h2 id="alphaDisplay" data-increment="fastChanging">You have 0.000 alpha.</h2></div>
+        
+        <div class="wideButton">Multiply multiplication by a multiplicative amount (x1.01): 0 Alpha</div>
+        
+        <div draggable="true">
+        <iframe src="minigames/cordle.html" title="Cordle" class="draggableMinigame"></iframe>
+        </div>
+
         <img src="assets/images/bubbles.png" alt="Floating botanical bubbles with delicate plants and translucent spheres scattered across a soft, neutral background, creating a serene and ethereal aesthetic with a gentle, calming tone">
-        <div>I'm trying to make a frutiger theme don't complain pls.</div>
+        <div>I'm trying to make a frutiger theme don't complain.</div>
     </div>
+</div>
+
+<div class="tabPage" id="changelog">
+    <p> Update 1: Added all Dimensions, and decorated a lot so the place didn't look so CodeTorch like. </p>
+    <p> Update 2: Woah Achievements! But, there's no achievements.js file yet. </p>
+    <p> Update 3: Achievements work! And I wasted 3 hours of my life debugging class notations, but as a result, I had to download local storage because I was really low IQ. </p>
+    <p> Update 4: Wow Notations work now! I didn't even waste another 3 hours! Kids, sometimes when an AI tries to overcomplicate things, just read a javascript lesson 9 years ago and implement it yourself. </p>
+    <p> Update 5: New Bonus tab (Woah) and #CringyNotationsIShould'vePublishedAtAprilFools! Also I broke somthing again </p>
+    <p> Update 6: New notations. It's literally permutations to invent sexualities. Like my friend really likes beig Allograyabroaceaegoakoicupiofrayautosapioreciprohomopanapothiambigynespectrabipomoandroplurisceterodemipolyallotroposexual! If any of you people hate it, it's not my fault of coming up with it while brushing my teeth!</p>
+    <p> Update 6-7 hahah so funni (not): Matter. Matters.</p>
 </div>
 
 <div id="infinityProgressContainer" class="infinityProgressContainer" aria-label="Infinity progress">
@@ -142,6 +196,7 @@
     <script src="js/save.js"></script>
     <script src="js/production.js"></script>
     <script src="js/notations/formatting.js"></script>
+    <script src="js/notations/permutation-index.js">   </script>
     <script src="js/newsmessages.js"></script>
     <script src="js/tabs.js"></script>
     <script src="js/initialization.js"></script>

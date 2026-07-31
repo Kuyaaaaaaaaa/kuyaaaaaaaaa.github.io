@@ -1,7 +1,7 @@
 function produce() {
 
     player.energy = player.energy.add(
-        player.dimensions[0].amount.mul(deltaTime)
+        player.dimensions[0].amount.mul(getDimensionMultiplier(0)).mul(deltaTime)
     );
 
     for (let i = 1; i < player.dimensions.length; i++) {
@@ -13,6 +13,10 @@ function produce() {
                 .mul(deltaTime)
             );
     }
+
+    player.alpha = player.alpha.mul(E(1.001).mul(player.bestRoll.pow(0.05)));
+
+    player.timePlayed += deltaTime;
 }
 
 function getInfinityProgress() {
@@ -32,13 +36,14 @@ function updateInfinityBar() {
     if (!fill || !text) return;
 
     const progress = getInfinityProgress();
-    const percent = (progress * 100).toFixed(2);
+    const percent = format(E(progress * 100));
 
     fill.style.width = `${Math.min(100, Math.max(0, progress * 100))}%`;
     text.textContent = `${percent}% to e308`;
 }
 
 function updateUI() {
+    // Generators
     document.getElementById("energy").textContent = format(player.energy);
 
     for (let i = 0; i < player.dimensions.length; i++) {
@@ -59,10 +64,23 @@ function updateUI() {
 
     }
 
+    document.getElementById("entropyConverterButton").textContent = player.energy.gte(1e90) ? `Reset Energy, Dimensions, and Compressed Energy for: ${format(player.entropy.add(player.energy.div(1e90).pow(0.5)))} Entropy.` : "You don't have enough Energy. So sad.";
+    document.getElementById("compressedEnergyDisplay").textContent = format(player.compressedEnergy) + " Compressed Energy";
+    document.getElementById("entropyDisplay").textContent = format(player.entropy) + " Entropy";
+
+
+    // Settings
+
+    document.getElementById("totalPlaytime").textContent = "Playtime: " + format(E(player.timePlayed));
+    
+    // Bonus
+
+    document.getElementById("alphaDisplay").textContent = `You have ${format(player.alpha)} alpha.`
     updateInfinityBar();
 }
 
-const DEVELOPER_speedUp = 1
+const DEVELOPER_speedUp = 60;
+let tickCountRoll = 0;
 
 function gameLoop() {
 
@@ -73,45 +91,52 @@ function gameLoop() {
     }
 
     checkAchievements();
+    checkMilestones();
+    rollAdvance();
     updateUI();
+    
 }
+
+function rollAdvance() {
+    tickCountRoll++;
+    if (tickCountRoll * deltaTime > 1 / player.rollCoolDownReciprocal) {
+        const thisRoll = roll(player.luckMultiplier);
+        if (thisRoll.gt(player.bestRoll)) {
+            player.bestRoll = thisRoll;
+
+        }
+        document.getElementById("extraLuckDisplay").innerHTML = `1 in ${format(player.bestRoll)}<br>Last Roll: 1 in ${format(thisRoll)}`;
+        tickCountRoll = 0;
+        document.getElementById("luckEffects").innerHTML = `Effects<br>x${format(player.bestRoll.pow(0.5))} Generators<br>x${format(player.bestRoll.pow(0.05))} Alpha Gain per Second`
+    }
+}
+
 
 function getDimensionMultiplier(index) {
     const dim = player.dimensions[index];
     let multiplier = new Decimal(1);
     multiplier = multiplier
-        .mul(dim.amount.log( new Decimal(20).max(new Decimal(100).sub(player.compressedEnergy.pow(0.5))) ).pow(new Decimal(Math.floor(dim.bought / 20)))
-            .pow(0.3)) // to keep the numbers from flipping exploding during startgame
-        .mul(player.compressedEnergy.pow(3.7));
+        .mul(dim.amount.log( E(20).max(E(100).sub(player.compressedEnergy.mul(player.entropy.log(10).max(1)).pow(0.5))) ).pow(E(Math.floor(dim.bought / 20)).pow(0.3))
+            ) // to keep the numbers from flipping exploding during startgame
+        .mul(player.compressedEnergy.mul(player.entropy.log(10).max(1)).pow(3.7).max(1))  // Ensure multiplier stays at least 1
+        .mul(player.entropyUpgradeEffect)
+        .mul(player.bestRoll.pow(0.5));
     return multiplier;
 }
 
-function getCostGrowthFactor(index, boughtCount) {
-    const tierBase = 2 + index * 0.35;
-    const boughtBoost = Math.min(1.2, 0.03 * boughtCount);
-    return new Decimal(tierBase + boughtBoost);
-}
+function getCostGrowthFactor(index, currentCost) {
+    const tierBase = new Decimal((index + 1) * 6);
+    const priceScale = currentCost && currentCost.gt(0)
+        ? currentCost.log10().div(100).add(1).min(5)
+        : new Decimal(1);
 
-function getEffectiveBuyMaxFactor(index, boughtCount, purchases) {
-    const startFactor = getCostGrowthFactor(index, boughtCount);
-    const capFactor = new Decimal(2 + index * 3 + 1.2);
-
-    // Tuning knobs:
-    // - rampLength: larger => slower scaling, smaller => faster scaling
-    // - curvePower: larger => more aggressive early scaling, smaller => more gradual
-    const rampLength = 20;
-    const curvePower = 1.2;
-
-    const progress = Math.min(1, Math.max(0, purchases / rampLength));
-    const easedProgress = Math.pow(progress, curvePower);
-
-    return startFactor.add(capFactor.sub(startFactor).mul(easedProgress));
+    return tierBase.mul(priceScale);
 }
 
 function buyDimension(index) {
     const dim = player.dimensions[index];
     if (player.energy.gte(dim.cost)) {
-        const factor = getCostGrowthFactor(index, dim.bought);
+        const factor = getCostGrowthFactor(index, dim.cost);
         player.energy = player.energy.sub(dim.cost);
         dim.bought++;
         dim.amount = dim.amount.add(1);
@@ -127,25 +152,25 @@ function buyMaxDimension(index) {
 
     if (energy.lt(cost0)) return;
 
-    const estimateFactor = getEffectiveBuyMaxFactor(index, dim.bought, 1);
+    const factor = getCostGrowthFactor(index, cost0);
     const n = energy
         .div(cost0)
-        .mul(estimateFactor.sub(1))
+        .mul(factor.sub(1))
         .add(1)
-        .log(estimateFactor)
+        .log(factor)
         .floor()
         .toNumber();
 
     if (n <= 0) return;
 
     const totalCost = cost0.mul(
-        estimateFactor.pow(n).sub(1).div(estimateFactor.sub(1))
+        factor.pow(n).sub(1).div(factor.sub(1))
     );
 
     player.energy = energy.sub(totalCost);
     dim.bought += n;
     dim.amount = dim.amount.add(n);
-    dim.cost = cost0.mul(estimateFactor.pow(n));
+    dim.cost = cost0.mul(factor.pow(n));
 
     updateUI();
 }
@@ -154,4 +179,18 @@ function maxAllDimensions() {
     for (let i = 0; i < player.dimensions.length; i++) {
         buyMaxDimension(i);
     }
+}
+
+function checkMilestones() {
+    if (player.energy.gte(1.79e308)) {
+        player.matterUnlockedBOOL = true;
+
+    }
+}
+
+function roll(luck) {
+    const exp = -Math.log(Math.random());
+    const exp10 = exp * Math.LOG10E;
+    const raw = Decimal.pow(10, exp10);
+    return raw.mul(luck);
 }

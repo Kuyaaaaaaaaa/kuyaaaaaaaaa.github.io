@@ -17,8 +17,8 @@ function createAchievement(id) {
 }
 
 const achievementNames = [
-    "First Steps",
-    "Getting Started",
+    "Developer, I Hate You",
+    "Well Deserved",
     ":3",
     "4 i in range",
     "Alphabetical Order",
@@ -28,7 +28,10 @@ const achievementNames = [
     "Nein",
     "307 orders of magnitude to go",
     "7",
-    "?net sulp enin s'tahW"
+    "?net sulp enin s'tahW",
+    "Squeeze it out",
+    "We broke the 9th wall, and it's peaceful here.",
+    "The alpha is here"
 ];
 
 const achievementDescriptions = [
@@ -43,7 +46,10 @@ const achievementDescriptions = [
     "Unlock your ninth generator.",
     "Unlock your tenth generator.",
     "Unlock your eleventh generator.",
-    "Unlock your twelfth generator."
+    "Unlock your twelfth generator.",
+    "Do your first compressed energy reset.",
+    "Upgrade your ninth generator exactly 9 times.",
+    "Have one thousand concurrent alpha."
 ];
 
 const achievementRequirements = [
@@ -83,6 +89,15 @@ const achievementRequirements = [
     function () {
         return player.dimensions[11].bought >= 1;
     },
+    function () {
+        return player.compressedEnergy.gte(0);
+    },
+    function () {
+        return player.dimensions[8].bought === 9;
+    },
+    function () {
+        return player.alpha.gte(1000);
+    }
 ];
 
 function checkAchievements() {

@@ -57,7 +57,10 @@ let newsmessagesLoading = ["WELCOME TO THE PURGATORY",
     "I",
     "67 hhahaha funny funni funnai ai funny scream funncy funnrin  wooo scream aaahhhhhAHHHHAHHAIoh",
     "For something, not something, ate something, created something.",
-    "Autocomplete..."];
+    "Autocomplete...",
+  
+    "\"My favorite is 'dill dough' ones\" -@myfaceleon, CodeTorch. no now is Pickle dough hehe",
+    "\"Fun fact: the player.energy.mag value in this project can be set in the project to Infinity using player.energy.mag = Infinity in the JavaScript console, cheesing the game. That should probably be fixed with an external API rather than a local value.\"-@SakuraMatsumoto, CodeTorch. gng what would HEVIPELLE think of u :sob:"];
 
 
 function fetchNews() {

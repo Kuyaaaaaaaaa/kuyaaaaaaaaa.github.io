@@ -29,9 +29,27 @@ function load() {
             player.compressedEnergy = new Decimal(loaded.compressedEnergy ?? 0);
             player.compressedEnergyCost = new Decimal(loaded.compressedEnergyCost ?? 1e10);
             player.entropy = new Decimal(loaded.entropy ?? 1);
+
+            player.entropyUpgradeCost = E(loaded.entropyUpgradeCost ?? 100);
+            player.entropyUpgradeEffect = E(loaded.entropyUpgradeEffect ?? 1);
+            player.entropyUpgradeAmount = E(loaded.entropyUpgradeEffect ?? 0);
+
+            player.matter = E(loaded.matter ?? 0);
+            player.rollCoolDownReciprocal = E(loaded.rollCoolDownReciprocal ?? 1);
+            player.luckMultiplier = E(loaded.luckMultiplier ?? 1);
+            player.bestRoll = E(loaded.bestRoll ?? 1);
+            player.luckMultiplierCost = E(loaded.luckMultiplierCost ?? 0.16666667);
+
             player.timePlayed = Number(loaded.timePlayed ?? 0);
             player.version = loaded.version ?? player.version;
+
             player.alpha = new Decimal(loaded.alpha ?? 1);
+            player.cordleWins = new Decimal(loaded.cordleWins ?? 0);
+
+            player.matterUnlockedBOOL = loaded.matterUnlockedBOOL === "true";
+
+
+            player.matter = E(loaded.matter ?? 1);
         } catch (error) {
             console.error("Save load failed partway through — falling back to defaults for remaining fields.", error);
         }
@@ -63,10 +81,7 @@ function load() {
     }
 
     // load the prestige buttons like a person would
-    document.getElementById("compressEnergyButton").textContent = "Compress your energy and generators for a log boost: " + format(player.compressedEnergyCost) + " Energy";
-    document.getElementById("compressBoost").textContent = "log"+format(new Decimal(20).max(new Decimal(100).sub(player.compressedEnergy.pow(0.5))))+"()";
-    document.getElementById("compressEnergyButton").textContent = "Compress your energy and generators for a log boost: " + format(player.compressedEnergyCost) + " Energy";
-    document.getElementById("entropyBoost").textContent = format(player.entropy.log(10).max(1));
+    loadHalfActiveItems();
 
 
 }

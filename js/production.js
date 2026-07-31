@@ -1,7 +1,7 @@
 function produce() {
 
     player.energy = player.energy.add(
-        player.dimensions[0].amount.mul(deltaTime)
+        player.dimensions[0].amount.mul(getDimensionMultiplier(0)).mul(deltaTime)
     );
 
     for (let i = 1; i < player.dimensions.length; i++) {
@@ -14,7 +14,7 @@ function produce() {
             );
     }
 
-    player.alpha = player.alpha.mul(1.001);
+    player.alpha = player.alpha.mul(E(1.001).mul(player.bestRoll.pow(0.05)));
 
     player.timePlayed += deltaTime;
 }
@@ -79,7 +79,8 @@ function updateUI() {
     updateInfinityBar();
 }
 
-const DEVELOPER_speedUp = 10
+const DEVELOPER_speedUp = 60;
+let tickCountRoll = 0;
 
 function gameLoop() {
 
@@ -90,17 +91,36 @@ function gameLoop() {
     }
 
     checkAchievements();
+    checkMilestones();
+    rollAdvance();
     updateUI();
+    
 }
+
+function rollAdvance() {
+    tickCountRoll++;
+    if (tickCountRoll * deltaTime > 1 / player.rollCoolDownReciprocal) {
+        const thisRoll = roll(player.luckMultiplier);
+        if (thisRoll.gt(player.bestRoll)) {
+            player.bestRoll = thisRoll;
+
+        }
+        document.getElementById("extraLuckDisplay").innerHTML = `1 in ${format(player.bestRoll)}<br>Last Roll: 1 in ${format(thisRoll)}`;
+        tickCountRoll = 0;
+        document.getElementById("luckEffects").innerHTML = `Effects<br>x${format(player.bestRoll.pow(0.5))} Generators<br>x${format(player.bestRoll.pow(0.05))} Alpha Gain per Second`
+    }
+}
+
 
 function getDimensionMultiplier(index) {
     const dim = player.dimensions[index];
     let multiplier = new Decimal(1);
     multiplier = multiplier
-        .mul(dim.amount.log( E(20).max(E(100).sub(player.compressedEnergy.mul(player.entropy.log(10).max(1)).pow(0.5))) ).pow(new Decimal(Math.floor(dim.bought / 20)))
-            .pow(0.3)) // to keep the numbers from flipping exploding during startgame
+        .mul(dim.amount.log( E(20).max(E(100).sub(player.compressedEnergy.mul(player.entropy.log(10).max(1)).pow(0.5))) ).pow(E(Math.floor(dim.bought / 20)).pow(0.3))
+            ) // to keep the numbers from flipping exploding during startgame
         .mul(player.compressedEnergy.mul(player.entropy.log(10).max(1)).pow(3.7).max(1))  // Ensure multiplier stays at least 1
-        .mul(player.entropyUpgradeEffect);
+        .mul(player.entropyUpgradeEffect)
+        .mul(player.bestRoll.pow(0.5));
     return multiplier;
 }
 
@@ -159,4 +179,18 @@ function maxAllDimensions() {
     for (let i = 0; i < player.dimensions.length; i++) {
         buyMaxDimension(i);
     }
+}
+
+function checkMilestones() {
+    if (player.energy.gte(1.79e308)) {
+        player.matterUnlockedBOOL = true;
+
+    }
+}
+
+function roll(luck) {
+    const exp = -Math.log(Math.random());
+    const exp10 = exp * Math.LOG10E;
+    const raw = Decimal.pow(10, exp10);
+    return raw.mul(luck);
 }

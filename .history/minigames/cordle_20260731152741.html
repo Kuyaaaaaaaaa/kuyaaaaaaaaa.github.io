@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cordle</title>
+  
+<!-- This is an AI generated code made by ReallyAmin in CodeTorch, yet
+ he still thinks he made it...-->
+
+<style>
+body {
+    background: #121213;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    font-size: 50px;
+    margin-bottom: 5px;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(6, 60px);
+    gap: 6px;
+    justify-content: center;
+    margin: 30px auto;
+}
+
+.box {
+    width: 60px;
+    height: 60px;
+    border: 2px solid #3a3a3c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.correct {
+    background: #538d4e;
+    border-color: #538d4e;
+}
+
+.close {
+    background: #b59f3b;
+    border-color: #b59f3b;
+}
+
+.wrong {
+    background: #3a3a3c;
+}
+
+input {
+    width: 180px;
+    padding: 12px;
+    font-size: 22px;
+    text-transform: uppercase;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#message {
+    font-size: 22px;
+    margin-top: 20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>CORDLE</h1>
+<p>Guess the 5 letter word!</p>
+
+<div id="board"></div>
+
+<input id="guess" maxlength="5">
+<button onclick="checkWord()">Guess</button>
+
+<div id="message"></div>
+
+
+<script>
+
+// HUGE WORD LIST
+const words = [
+
+"APPLE","BEACH","BRAIN","BRICK","CLOUD","CODES",
+"CHAIR","CHAOS","CHESS","CHILD","CLEAN","CLEAR",
+"COINS","COLDY","COLOR","COMET","CROWN","CYCLE",
+"DAILY","DANCE","DATES","DEATH","DEPOT","DOORS",
+"DREAM","DRINK","DRIVE","EARTH","EAGER","EAGLE",
+"EARLY","EIGHT","ELBOW","EMPTY","ENJOY","ENTRY",
+"EVENT","EVERY","FAITH","FALSE","FANCY","FARMY",
+"FIELD","FINAL","FIRST","FLAME","FLASH","FLOOR",
+"FLOWER","FOCUS","FORCE","FRAME","FRUIT","GIANT", // son FLOWER!
+"GLASS","GLOBE","GRAPE","GRASS","GREEN","GROUP",
+"GUARD","HAPPY","HEART","HOUSE","HOVER","HUMAN",
+"IMAGE","INDEX","INPUT","ISSUE","JUICE","JUMBO",
+"KNIFE","KNOWN","LABEL","LASER","LEMON","LEVEL",
+"LIGHT","LIMIT","LOCAL","LUCKY","MAGIC","MAJOR",
+"MAPLE","MARCH","MATCH","MOUSE","MUSIC","NIGHT",
+"NOISE","NORTH","OCEAN","OFFER","OLIVE","ORDER",
+"OTHER","PAINT","PAPER","PARTY","PEACE","PHONE",
+"PHOTO","PIANO","PLACE","PLANE","PLANT","PLATE",
+"POINT","POWER","PRESS","PRICE","PRIDE","PRIME",
+"QUEEN","QUICK","QUIET","RADIO","RANGE","RATIO",
+"REACH","READY","RIGHT","RIVER","ROBOT","ROUGH",
+"ROUND","ROYAL","SCALE","SCHOOL","SCORE","SHARE",
+"SHARK","SHEEP","SHIFT","SHINE","SHOES","SHORT",
+"SILLY","SKILL","SKYLY","SMILE","SMOKE","SNAKE",
+"SNOWY","SOLAR","SOUND","SPACE","SPEED","SPELL",
+"SPIKE","SPORT","STACK","STAGE","STAND","START",
+"STONE","STORM","STORY","STRAY","SUGAR","SUNNY",
+"SWEET","TABLE","TEACH","TEAMS","TEETH","TIGER",
+"TIMER","TITLE","TODAY","TOKEN","TOUCH","TOWER",
+"TRACK","TRAIN","TREND","TRUCK","TRUST","TRUTH",
+"UNDER","UNION","UNITY","VALUE","VIDEO","VOICE",
+"WATER","WHEEL","WHITE","WHOLE","WORLD","WRITE",
+"YOUNG","ZEBRA"
+
+];
+
+
+// DAILY WORD SYSTEM
+let date = new Date();
+
+let day = Math.floor(
+    date.getTime() / (1000 * 60 * 60 * 24)
+);
+
+let answer = words[day % words.length];
+
+
+let attempts = 0;
+
+
+// CREATE 30 EMPTY BOXES
+
+for(let i = 0; i < 30; i++){
+
+    let box = document.createElement("div");
+    box.className = "box";
+    box.id = "box" + i;
+
+    document.getElementById("board")
+    .appendChild(box);
+
+}
+
+
+function checkWord(){
+
+    let input = document
+    .getElementById("guess");
+
+    let guess = input.value.toUpperCase();
+
+
+    if(guess.length !== 5){
+        alert("Enter a 5 letter word!");
+        return;
+    }
+
+
+    if(attempts >= 6){
+        return;
+    }
+
+
+    for(let i = 0; i < 5; i++){
+
+        let box =
+        document.getElementById(
+            "box" + (attempts*5+i)
+        );
+
+
+        box.innerHTML = guess[i];
+
+
+        if(guess[i] === answer[i]){
+
+            box.classList.add("correct");
+
+        }
+
+        else if(answer.includes(guess[i])){
+
+            box.classList.add("close");
+
+        }
+
+        else{
+
+            box.classList.add("wrong");
+
+        }
+
+    }
+
+
+    attempts++;
+
+
+    if(guess === answer){
+
+        document.getElementById("message")
+        .innerHTML =
+        "🎉 You solved Cordle!";
+
+        attempts = 6;
+
+    }
+
+    else if(attempts === 6){
+
+        document.getElementById("message")
+        .innerHTML =
+        "The word was: " + answer;
+
+    }
+
+
+    input.value="";
+
+}
+
+
+document
+.getElementById("guess")
+.addEventListener("keyup", function(event){
+
+    if(event.key === "Enter"){
+        checkWord();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
