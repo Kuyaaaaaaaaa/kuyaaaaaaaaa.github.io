@@ -79,7 +79,7 @@ function updateUI() {
     updateInfinityBar();
 }
 
-const DEVELOPER_speedUp = 60;
+const DEVELOPER_speedUp = 1;
 let tickCountRoll = 0;
 
 function gameLoop() {
